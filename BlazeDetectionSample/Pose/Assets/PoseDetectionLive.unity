@@ -562,7 +562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b2d0906b2e24a240af72690178d3d5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  posePreview: {fileID: 0}
+  posePreview: {fileID: 6880152826874572511, guid: 585d5cb4d0fde2045805fda7581e0bda, type: 3}
   imagePreview: {fileID: 1727924783}
   cameraCapture: {fileID: 841803295}
   poseDetector: {fileID: 5022602860645237092, guid: e30d99d4b5cbed1439961d20a00ea84b, type: 3}
