@@ -21,6 +21,9 @@ public class CameraCapture : MonoBehaviour
     private WebCamTexture _webCamTexture;
     private bool _isPlaying = false;
 
+    // Expose whether the webcam feed is playing
+    public bool IsPlaying => _isPlaying;
+
     /// <summary>
     /// Returns the live webcam WebCamTexture. Can be used by other scripts (e.g., PoseDetection).
     /// </summary>
@@ -48,9 +51,18 @@ public class CameraCapture : MonoBehaviour
         else
             device = System.Array.Find(WebCamTexture.devices, d => d.name == deviceName);
 
-        _webCamTexture = new WebCamTexture(device.name, width, height, fps);
-        _webCamTexture.Play();
-        _isPlaying = true;
+        try
+        {
+            _webCamTexture = new WebCamTexture(device.name, width, height, fps);
+            _webCamTexture.Play();
+            _isPlaying = true;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"CameraCapture: Failed to start WebCamTexture for device '{device.name}': {e}");
+            _webCamTexture = null;
+            _isPlaying = false;
+        }
     }
 
     void OnDisable()

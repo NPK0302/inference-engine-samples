@@ -156,9 +156,19 @@ public class PoseDetectionLive : MonoBehaviour
         m_DetectorInput = new Tensor<float>(new TensorShape(1, detectorInputSize, detectorInputSize, 3));
         m_LandmarkerInput = new Tensor<float>(new TensorShape(1, landmarkerInputSize, landmarkerInputSize, 3));
 
-        // Wait for camera initialization
+        // Wait for camera initialization with timeout to avoid hanging the Editor/Play mode
+        const float kCameraTimeoutSeconds = 5.0f;
+        float startTime = Time.realtimeSinceStartup;
         while (cameraCapture.WebCamTex == null || !cameraCapture.WebCamTex.didUpdateThisFrame)
+        {
+            if (Time.realtimeSinceStartup - startTime > kCameraTimeoutSeconds)
+            {
+                Debug.LogError($"PoseDetectionLive: Camera did not initialize within {kCameraTimeoutSeconds} seconds. Aborting live detection.");
+                enabled = false;
+                return;
+            }
             await Awaitable.NextFrameAsync();
+        }
 
         Debug.Log("Camera ready. Starting live pose detection...");
 
